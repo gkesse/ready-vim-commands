@@ -1,4 +1,15 @@
 #================================================
+# yocto
+yocto_poky:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_ROOT) && git clone -b thud git://git.yoctoproject.org/poky
+yocto_rpi:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY) && git clone -b thud git://git.yoctoproject.org/meta-raspberrypi
+yocto_env:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY) && . oe-init-build-env ../build
+#================================================
 # git
 git_status:
 	@cd $(GPROJECT_PATH) && git status -u

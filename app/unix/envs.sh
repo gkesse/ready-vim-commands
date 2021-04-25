@@ -1,10 +1,10 @@
 #================================================
 export "GPROJECT_ROOT=/home/rpi4/Programs"
 export "GPROJECT_PATH=${GPROJECT_ROOT}/ReadyRPI"
-export "GPROJECT_SRC=${GPROJECT_PATH}/app/code/readyapp/src"
-export "GPROJECT_DATA=${GPROJECT_PATH}/data"
+export "GPROJECT_APP=${GPROJECT_PATH}/app"
 #================================================
-export "GSQLITE_DB_PATH=${GPROJECT_DATA}/sqlite/config.dat"
+export "GYOCTO_ROOT=${GPROJECT_APP}/yocto"
+export "GYOCTO_POKY=${GYOCTO_ROOT}/poky"
 #================================================
 export "GGIT_URL=https://github.com/gkesse/ReadyRPI"
 export "GGIT_NAME=ReadyRPI"
