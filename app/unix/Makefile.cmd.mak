@@ -12,16 +12,19 @@ yocto_rpi:
 	@cd $(GYOCTO_POKY) && git clone -b $(GYOCTO_BRANCH) git://git.yoctoproject.org/meta-raspberrypi
 yocto_env:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
-	cd $(GYOCTO_POKY) && source oe-init-build-env $(GYOCTO_BUILD)
+	@cd $(GYOCTO_POKY) && source oe-init-build-env $(GYOCTO_BUILD)
 yocto_rpi_ls:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
 	@cd $(GYOCTO_POKY) && ls -l $(GYOCTO_RPI)
 yocto_bitbake:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
-	@cd $(GYOCTO_POKY)/$(GYOCTO_BUILD) && bitbake core-image-base
-yocto_sd:
+	@cd $(GYOCTO_POKY) && source oe-init-build-env $(GYOCTO_BUILD) && bitbake core-image-base
+yocto_img:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
-	@cd $(GYOCTO_POKY)/$(GYOCTO_BUILD) && bitbake core-image-base
+	@cd $(GYOCTO_IMG_PATH) && ls -l *sdimg
+yocto_dd:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY) && sudo dd if=tmp/deploy/image/raspberrypi3/core-image-minimal-raspberrypi3.rpi-sdimg of=/dev/mmcblk0
 yocto_rm:
 	@if ! [ -d $(GPROJECT_APP) ] ; then mkdir -p $(GPROJECT_APP) ; fi
 	@cd $(GPROJECT_APP) && rm -rf $(GYOCTO_ROOT)
