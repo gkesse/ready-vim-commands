@@ -21,13 +21,38 @@ yocto_bitbake:
 	@cd $(GYOCTO_POKY) && source oe-init-build-env $(GYOCTO_BUILD) && bitbake core-image-base
 yocto_img:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
-	@cd $(GYOCTO_IMG_PATH) && ls -l *sdimg
+	@cd $(GYOCTO_IMG_PATH) && ls -l *rpi-sdimg
+yocto_lsblk:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@lsblk -p
+yocto_umount:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@umount $(GYOCTO_IMG_SD)?
 yocto_dd:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
-	@cd $(GYOCTO_POKY) && sudo dd if=tmp/deploy/image/raspberrypi3/core-image-minimal-raspberrypi3.rpi-sdimg of=/dev/mmcblk0
+	@sudo dd if=$(GYOCTO_IMG_FILE) of=$(GYOCTO_IMG_SD)
 yocto_rm:
 	@if ! [ -d $(GPROJECT_APP) ] ; then mkdir -p $(GPROJECT_APP) ; fi
 	@cd $(GPROJECT_APP) && rm -rf $(GYOCTO_ROOT)
+#================================================
+# buildroot
+buildroot_all: 
+
+buildroot_wget:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@cd $(GBUILDROOT_ROOT) && wget $(GBUILDROOT_URL) 
+buildroot_tar:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@cd $(GBUILDROOT_ROOT) && tar xzfv $(GBUILDROOT_ARCHIVE)
+buildroot_configs:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@cd $(GBUILDROOT_SRC) && ls -l configs
+buildroot_defconfig:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@cd $(GBUILDROOT_SRC) && make $(GBUILDROOT_CONFIG)
+buildroot_menuconfig:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@cd $(GBUILDROOT_SRC) && make menuconfig
 #================================================
 # git
 git_status:
