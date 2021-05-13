@@ -65,6 +65,18 @@ buildroot_defconfig:
 buildroot_menuconfig:
 	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
 	@cd $(GBUILDROOT_SRC) && make menuconfig
+buildroot_build:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@cd $(GBUILDROOT_SRC) && make
+buildroot_lsblk:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@lsblk -p
+buildroot_umount:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@umount $(GBUILDROOT_IMG_SD)?
+buildroot_dd:
+	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
+	@sudo dd if=$(GBUILDROOT_IMG_FILE) of=$(GBUILDROOT_IMG_SD)
 #================================================
 # git
 git_status:
