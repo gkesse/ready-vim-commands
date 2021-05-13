@@ -4,6 +4,33 @@ SHELL := /bin/bash
 # yocto
 yocto_all: yocto_poky yocto_rpi yocto_oe yocto_env yocto_rpi_ls
 
+yocto_deps:
+	@sudo apt install -y \
+	gawk \
+	wget \
+	git-core \
+	diffstat \
+	unzip \
+	texinfo \
+	build-essential \
+	chrpath \
+	socat \
+	cpio \
+	python3 \
+	python3-pip \
+	xz-utils \
+	debianutils \
+	iputils-ping \
+	python3-git \
+	python3-jinja2 \
+	libegl1-mesa \
+	libsdl1.2-dev \
+	pylint3 \
+	xterm \
+	gcc-multilib \
+	python3-pexpect \
+	python3-pexpect \
+	bmap-tools \
 yocto_poky:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
 	@cd $(GYOCTO_ROOT) && git clone -b $(GYOCTO_BRANCH) git://git.yoctoproject.org/poky
@@ -42,7 +69,10 @@ yocto_umount:
 	@umount $(GYOCTO_IMG_SD)?
 yocto_dd:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
-	@sudo dd if=$(GYOCTO_IMG_FILE) of=$(GYOCTO_IMG_SD)
+	@sudo dd if=$(GYOCTO_IMG_RPI) of=$(GYOCTO_IMG_SD)
+yocto_bmap:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@sudo bmaptool copy $(GYOCTO_IMG_WIC) --bmap $(GYOCTO_IMG_BMAP) $(GYOCTO_IMG_SD)
 yocto_rm:
 	@if ! [ -d $(GPROJECT_APP) ] ; then mkdir -p $(GPROJECT_APP) ; fi
 	@cd $(GPROJECT_APP) && rm -rf $(GYOCTO_ROOT)
