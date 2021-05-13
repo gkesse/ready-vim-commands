@@ -2,7 +2,7 @@
 SHELL := /bin/bash
 #================================================
 # yocto
-yocto_all: yocto_poky yocto_rpi yocto_env yocto_rpi_ls
+yocto_all: yocto_poky yocto_rpi yocto_oe yocto_env yocto_rpi_ls
 
 yocto_poky:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
@@ -10,6 +10,18 @@ yocto_poky:
 yocto_rpi:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
 	@cd $(GYOCTO_POKY) && git clone -b $(GYOCTO_BRANCH) git://git.yoctoproject.org/meta-raspberrypi
+yocto_oe:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY) && git clone -b $(GYOCTO_BRANCH) git://git.openembedded.org/meta-openembedded
+yocto_crypt:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY) && git clone https://github.com/cpb-/password-encryption
+yocto_crypt_build:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY)/password-encryption && make all
+yocto_crypt_pass:
+	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
+	@cd $(GYOCTO_POKY)/password-encryption && ./crypt linux
 yocto_env:
 	@if ! [ -d $(GYOCTO_ROOT) ] ; then mkdir -p $(GYOCTO_ROOT) ; fi
 	@cd $(GYOCTO_POKY) && source oe-init-build-env $(GYOCTO_BUILD)
@@ -36,7 +48,7 @@ yocto_rm:
 	@cd $(GPROJECT_APP) && rm -rf $(GYOCTO_ROOT)
 #================================================
 # buildroot
-buildroot_all: 
+buildroot_all: buildroot_wget buildroot_tar buildroot_configs
 
 buildroot_wget:
 	@if ! [ -d $(GBUILDROOT_ROOT) ] ; then mkdir -p $(GBUILDROOT_ROOT) ; fi
